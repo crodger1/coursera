@@ -1,21 +1,16 @@
 pollutantmean <- function(directory, pollutant, id = 1:332) {
 
-  y <- paste(directory,"/",formatC(id[1],width=3,format="d",flag="0"),".csv",sep="")
-  dfa <- read.csv(y)
-  ##head(data)
-  
-  for(i in id[-1]) {
-    x <- paste(directory,"/",formatC(i,width=3,format="d",flag="0"),".csv",sep="")
-    df2 <- read.csv(x)
-    ##head(df2)
-    dfa<-rbind(dfa,df2)
+  list_files<-list.files(directory,full.names=TRUE)
+  dat<-data.frame()
+
+  for(i in length(list_files)) {
+    dat<-rbind(dat, read.csv(list_files[i]))
   }
-  
+    
+  dat_subset <- dat[dat$ID %in% c(10,13),]
+  #dat_subset <- dat[which(dat[,4] %in% id), ]
+  head(dat_subset)
+  #mean(dat_subset[,pollutant], na.rm=TRUE)
   
 }
-  
-
-
-
-pollutantmean("specdata","nitrate",3:10)
 

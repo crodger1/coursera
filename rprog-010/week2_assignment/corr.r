@@ -12,23 +12,23 @@ corr <- function(directory, threshold = 0) {
   
   list_files<-list.files(directory,full.names=TRUE)
   dfa<-data.frame()
+  corrs<-numeric()
+  
+  
   
   for(i in 1:332) {
     x <- paste(directory,"/",formatC(i,width=3,format="d",flag="0"),".csv",sep="")
-    df2 <- read.csv(x)
-    dfa <- rbind(dfa,df2)
-  }
-
-  
-  corrs<-numeric()
-
-  for(j in 1:332) {
-    if ( nrow(na.omit(dfa[dfa$ID == j , ])) > threshold ) {
+    dfa <- read.csv(x)
+    
+    if ( nrow(na.omit(dfa[dfa$ID == i , ])) > threshold ) {
       
-      corrs<-c( corrs, cor(dfa$sulfate,dfa$nitrate,use="pairwise.complete.obs") )
+      dfa_sub<-dfa[dfa$ID == i , ]
       
+      corrs<-c( corrs, cor(dfa_sub$sulfate,dfa_sub$nitrate,use="complete.obs") )
     }
+    
   }
+
   
   corrs
   
